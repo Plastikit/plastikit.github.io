@@ -1,0 +1,220 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../core-selector/core-selector.html">
+
+<!--
+plastik-horizontal-multiselect is a horizontal, multi-selectable listbox with support for reset items.
+It was inspired by the filter options in the new Google Maps Android app.
+
+##### Example
+
+    <plastik-horizontal-multiselect>
+        <core-item reset>Any</core-item>
+        <core-item value="0">Free</core-item>
+        <core-item value="1-100">$1 - $100</core-item>
+        <core-item value="101-500">$101 - $500</core-item>
+        <core-item value="501+">$501+</core-item>
+    </plastik-horizontal-multiselect>
+
+@element plastik-horizontal-multiselect
+@blurb Horizontal, multi-selectable listbox with support for reset items.
+@status alpha
+@homepage https://github.com/vsimonian/plastik-horizontal-multiselect
+-->
+<polymer-element name="plastik-horizontal-multiselect" attributes="single selected valueattr required" extends="core-selector">
+    <template>
+        <link rel="stylesheet" href="plastik-horizontal-multiselect.css">
+        <shadow></shadow>
+    </template>
+    <script>
+        Polymer('plastik-horizontal-multiselect', {
+            /**
+             * The `selected` property gets or sets the array of currently selected values. If `single` is true, 
+             * `selected` will return a single value, not an array.
+             *
+             * @attribute selected
+             * @type Object
+             * @default null
+             */
+            selected: { value: null, reflect: true },
+            
+            /**
+             * The `valueattr` property gets or sets the attribute to use when referencing an item's value.
+             * 
+             * @attribute valueattr
+             * @type String
+             * @default 'value'
+             */
+             valueattr: 'value',
+             
+            /**
+             * The `required` property gets or sets whether or not the element must have at least one item selected at all times.
+             * 
+             * @attribute required
+             * @type bool
+             * @default false
+             */
+            required: false,
+            
+            /**
+             * If the `single` is set to true, the element will only allow a single item to be selected at a time.
+             *
+             * @attribute single
+             * @type bool
+             * @default false
+             */
+            single: false,
+            
+            ready: function (event, detail, sender) {
+                this.multi = !this.single;
+                this.cleanSelectedVariable();
+                if ((this.selected === undefined || this.selected === null || (this.selected.length && this.selected.length == 0)) && !this.single && this.getResetItemIndexOrValue() != -1)
+                    this.selectedChanged();
+                this.super();
+            },
+            
+
+            /**
+             * The `clearSelection` method deselects all items.
+             *
+             * @method clearSelection
+             * @param {Array} exclusions (optional) A list of values of items to exclude from deselection.
+             */
+            clearSelection: function (exclusions) {
+                var excludes = [];
+                if (Array.isArray(exclusions)) {
+                    for (var i = 0; i < exclusions.length; i++) {
+                        if (this.valueToItem(exclusions[i])) {
+                            excludes.push(exclusions[i]);
+                        }
+                    }
+                }
+                this.$.selection.selection.slice().forEach(function (item) {
+                    var v = this.valueForNode(item) || this.items.indexOf(item);
+                    if (excludes.length < 1 || excludes.indexOf(v) < 0) {
+                        this.$.selection.setItemSelected(item, !this.single && item.hasAttribute('reset') && excludes.length < 1);
+                    }
+                }, this);
+                if (excludes.length < 1 && !this.single)
+                {
+                    var resetIdxOrValue = this.getResetItemIndexOrValue();
+                    if (resetIdxOrValue > -1) { this.valueToSelection(resetIdxOrValue); }
+                    else if (this.required) { this.valueToSelection(this.valueForNode(this.items[0])); }
+                }
+            },
+            
+            selectionSelect: function (e, detail) {
+                this.updateSelectedItem();
+                if (!this.single && this.required && detail.item && !detail.isSelected && this.selected.length < 1) {
+                    this.selected = [this.valueForNode(detail.item)];
+                } else if (detail.item) {
+                    if (!this.single && detail.item.hasAttribute('reset') && detail.isSelected) {
+                        this.selection = [this.valueForNode(detail.item)];
+                        for (var i = 0; i < this.items.length; i++) {
+                            this.applySelection(this.items[i], this.items[i].hasAttribute('reset'));
+                        }
+                    }
+                    else
+                        this.applySelection(detail.item, detail.isSelected);
+                }
+            },
+            
+            getResetItem: function () {
+                var resetItem = null;
+
+                for (var i = 0; i < this.items.length; i++) {
+                    if (this.items[i].hasAttribute('reset')) {
+                        resetItem = this.items[i] || i;
+                        break;
+                    }
+                }
+
+                return resetItem;
+            },
+            
+            getResetItemIndexOrValue: function () {
+                var resetIdxOrValue = -1;
+
+                for (var i = 0; i < this.items.length; i++) {
+                    if (this.items[i].hasAttribute('reset')) {
+                        resetIdxOrValue = this.valueForNode(this.items[i]) || i;
+                        break;
+                    }
+                }
+
+                return resetIdxOrValue;
+            },
+            
+            updateSelected: function () {
+                this.validateSelected();
+                if (!this.single) {
+                    this.clearSelection(this.selected);
+                    this.selected && this.selected.forEach(function (s) {
+                        this.setValueSelected(s, true);
+                    }, this);
+                } else {
+                    this.valueToSelection(this.selected);
+                }
+            },
+            
+            cleanSelectedVariable: function () {
+                if (!this.single && !Array.isArray(this.selected) && this.selected !== null && this.selected !== undefined) {
+                    this.selected = [this.selected];
+                    return true;
+                } else if (this.single && Array.isArray(this.selected) && this.selected.length > 0) {
+                    this.selected = this.selected[0];
+                    return true;
+                } else if (!this.single && this.selected === undefined || this.selected == null) {
+                    this.selected = [];
+                    return true;
+                } else if (this.single && Array.isArray(this.selected) && this.selected.length < 1) {
+                    this.selected = null;
+                    return true;
+                }
+                return false;
+            },
+            
+            selectedChanged: function () {
+                if (this.cleanSelectedVariable())
+                    return;
+
+                var resetIdxOrValue = this.getResetItemIndexOrValue();
+
+                if (!this.single && Array.isArray(this.selected)) {
+                    for (var i = 0; i < this.selected.length; i++) {
+                        var item = this.valueToItem(this.selected[i]);
+                        if (item === null || item === undefined) {
+                            this.selected.splice(i, 1);
+                            i--;
+                            continue;
+                        }
+                        if (resetIdxOrValue != -1 && this.selected[i] == resetIdxOrValue) {
+                            this.selected.length = 0;
+                            this.valueToSelection(resetIdxOrValue);
+                            this.updateSelectedItem();
+                            break;
+                        } else if (resetIdxOrValue != -1 && i == this.selected.length - 1) {
+                            this.$.selection.setItemSelected(this.valueToItem(resetIdxOrValue), false);
+                        }
+                    }
+                }
+
+                this.clearSelection();
+
+                if (!this.single && resetIdxOrValue != -1 && (this.selected === null || this.selected === undefined || !this.selected.length)) {
+                    this.valueToSelection(resetIdxOrValue);
+                } else if (!this.single) {
+                    this.selected && this.selected.forEach(function (s) {
+                        this.valueToSelection(s);
+                    }, this);
+                } else {
+                    if (this.selected) { this.valueToSelection(this.selected); }
+                }
+                this.super();
+            },
+            
+            singleChanged: function () {
+                this.multi = !this.single;
+            }
+        });
+    </script>
+</polymer-element>

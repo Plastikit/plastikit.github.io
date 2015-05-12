@@ -1,0 +1,147 @@
+<!DOCTYPE HTML>
+<html>
+  
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <title>plastik-horizontal-multiselect</title>
+    <script src="../../webcomponentsjs/webcomponents.min.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+    <link rel="import" href="../../core-item/core-item.html">
+    <link rel="import" href="../plastik-horizontal-multiselect.html">
+  </head>
+  
+  <body>
+    <plastik-horizontal-multiselect>
+      <core-item reset>Any</core-item>
+      <core-item value="tier1">Free</core-item>
+      <core-item value="tier2">$1 - $100</core-item>
+      <core-item value="tier3">$101 - $500</core-item>
+      <core-item value="tier4">$501+</core-item>
+    </plastik-horizontal-multiselect>
+    <script>
+      var multiselect = document.querySelector('plastik-horizontal-multiselect');
+      
+      function selectorShouldExist(selector) {
+          assert.ok(multiselect.querySelector(selector), selector);
+      }
+      
+      function selectorShouldNotExist(selector) {
+          assert.notOk(multiselect.querySelector(selector), selector);
+      }
+  
+      suite('<plastik-horizontal-multiselect>', function() {
+  
+        test('`selected` is an empty array when element is initialized', function() {
+          assert.deepEqual(multiselect.selected, []);
+        });
+        
+        test('reset item is selected when element is initialized', function() {
+          selectorShouldExist('[reset].core-selected');
+          selectorShouldNotExist('.core-selected:not([reset])');
+        });
+        
+        test('multiselect sets `selected` to empty array if `selected` is set to null', function(done) {
+          multiselect.selected = null;
+          flush(function() { assert.deepEqual(multiselect.selected, []); done(); });
+        });
+        
+        test('only reset item is selected when `selected` is set to null', function() {
+          selectorShouldExist('[reset].core-selected');
+          selectorShouldNotExist('.core-selected:not([reset])');
+        });
+        
+        test('multiselect converts `selected` to array if it is set with a different type', function(done) {
+          multiselect.selected = 'tier4';
+          flush(function() { assert.deepEqual(multiselect.selected, ['tier4']); done(); });
+        });
+        
+        test('multiselect selects correct element when `selected` is set to a non-array type', function() {
+          selectorShouldExist('[value="tier4"].core-selected');
+          selectorShouldNotExist('.core-selected:not([value="tier4"])');
+        });
+        
+        test('reset item is no longer selected after `selected` is changed to a valid value', function(done) {
+          multiselect.selected = ['tier4'];
+          flush(function() { selectorShouldNotExist('[reset].core-selected'); done(); });
+        });
+        
+        test('reset item is selected after `selected` is changed to an invalid value', function(done) {
+          multiselect.selected = 'abcd1234';
+          flush(function() { selectorShouldExist('[reset].core-selected'); done(); });
+        });
+        
+        test('multiselect selects proper items when `selected` is set to an array of valid values', function(done) {
+          multiselect.selected = ['tier1', 'tier3'];
+          flush(function () {
+            selectorShouldExist('[value="tier1"].core-selected');
+            selectorShouldNotExist('[value="tier2"].core-selected');
+            selectorShouldExist('[value="tier3"].core-selected');
+            selectorShouldNotExist('[value="tier4"].core-selected');
+            selectorShouldNotExist('[reset].core-selected');
+            done();
+          });
+        });
+        
+        test('multiselect selects proper items when `selected` is set to an array of both valid and invalid values', function(done) {
+          multiselect.selected = ['tier2', 'abcd1234', 'tier1'];
+          flush(function () {
+            selectorShouldExist('[value="tier1"].core-selected');
+            selectorShouldExist('[value="tier2"].core-selected');
+            selectorShouldNotExist('[value="tier3"].core-selected');
+            selectorShouldNotExist('[value="tier4"].core-selected');
+            selectorShouldNotExist('[reset].core-selected');
+            done();
+          });
+        });
+        
+        test('only reset item is selected when `selected` is set to empty array after having selections before', function(done) {
+          multiselect.selected = [];
+          flush(function () {
+            selectorShouldExist('[reset].core-selected');
+            selectorShouldNotExist('.core-selected:not([reset])');
+            done();
+          });
+        });
+        
+        test('plastik-horizontal-multiselect.clearSelection() clears selected values successfully', function(done) {
+          multiselect.selected = ['tier1', 'tier2', 'tier3'];
+          flush(function () {
+            multiselect.clearSelection();
+            flush(function () {
+              selectorShouldExist('[reset].core-selected');
+              selectorShouldNotExist('.core-selected:not([reset])');
+              done();
+            });
+          });
+        });
+        
+        test('plastik-horizontal-multiselect.clearSelection(exclusions) excludes requested items successfully', function(done) {
+          multiselect.selected = ['tier1', 'tier2', 'tier3'];
+          flush(function () {
+            multiselect.clearSelection(['tier2']);
+            flush(function () {
+              selectorShouldExist('[value="tier2"].core-selected');
+              selectorShouldNotExist('.core-selected:not([value="tier2"])');
+              done();
+            });
+          });
+        });
+        
+        test('plastik-horizontal-multiselect.clearSelection(exclusions) clears selected values successfully, even when passed invalid values', function(done) {
+          multiselect.selected = ['tier1', 'tier2', 'tier3'];
+          flush(function () {
+            multiselect.clearSelection(['abcd1234']);
+            flush(function () {
+              selectorShouldExist('[reset].core-selected');
+              selectorShouldNotExist('.core-selected:not([reset])');
+              done();
+            });
+          });
+        });
+  
+      });
+    </script>
+  </body>
+
+</html>

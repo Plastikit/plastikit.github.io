@@ -1,0 +1,40 @@
+{
+  "name": "plastik-horizontal-multiselect",
+  "authors": [
+    "Plastikit Authors <developers@plastikit.org>"
+  ],
+  "description": "Horizontal selectable listbox with multiselect and default item capabilities.",
+  "keywords": [
+    "web-component",
+    "web-components",
+    "polymer",
+    "select",
+    "list",
+    "menu",
+    "item"
+  ],
+  "main": "plastik-horizontal-multiselect.html",
+  "license": "BSD-3-Clause",
+  "homepage": "https://github.com/Plastikit/plastik-horizontal-multiselect/",
+  "ignore": [
+    "/.*",
+    "/tests/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^0.5.6",
+    "core-selector": "Polymer/core-selector#^0.5.6",
+    "core-item": "Polymer/core-item#^0.5.6"
+  },
+  "devDependencies": {
+    "web-component-tester": "Polymer/web-component-tester#^3.1.3"
+  },
+  "_release": "908f0348b8",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "908f0348b8cd3eee4531e718b410616cab3d6e41"
+  },
+  "_source": "git://github.com/Plastikit/plastik-horizontal-multiselect.git",
+  "_target": "*",
+  "_originalSource": "Plastikit/plastik-horizontal-multiselect"
+}
