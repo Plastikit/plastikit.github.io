@@ -1,0 +1,6 @@
+[submodule "0.9/components/plastik-selector"]
+	path = 0.9/components/plastik-selector
+	url = https://github.com/Plastikit/plastik-selector
+[submodule "0.9/components/plastik-option-list"]
+	path = 0.9/components/plastik-option-list
+	url = https://github.com/Plastikit/plastik-option-list
