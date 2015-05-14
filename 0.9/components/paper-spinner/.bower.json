@@ -1,0 +1,40 @@
+{
+  "name": "paper-spinner",
+  "version": "0.9.0",
+  "authors": [
+    "The Polymer Authors"
+  ],
+  "keywords": [
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "main": "index.html",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/PolymerElements/paper-spinner"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/PolymerElements/paper-spinner",
+  "ignore": [],
+  "dependencies": {
+    "polymer": "Polymer/polymer#v0.9.0-rc.1",
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#^0.9.0"
+  },
+  "devDependencies": {
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.6.1",
+    "web-component-tester": "*",
+    "iron-doc-viewer": "PolymerElements/iron-doc-viewer#^0.9.0",
+    "test-fixture": "PolymerElements/test-fixture#^0.9.0"
+  },
+  "_release": "0.9.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.9.0",
+    "commit": "a8d9c4ab2a6c64b0da05fdb4b1efd444407288d6"
+  },
+  "_source": "git://github.com/PolymerElements/paper-spinner.git",
+  "_target": "^0.9.0",
+  "_originalSource": "PolymerElements/paper-spinner"
+}

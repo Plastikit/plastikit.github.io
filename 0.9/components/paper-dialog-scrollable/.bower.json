@@ -1,0 +1,43 @@
+{
+  "name": "paper-dialog-scrollable",
+  "version": "0.9.0",
+  "authors": [
+    "The Polymer Authors"
+  ],
+  "keywords": [
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "main": [
+    "paper-dialog-scrollable.html"
+  ],
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/PolymerElements/paper-dialog-scrollable"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/PolymerElements/paper-dialog-scrollable",
+  "ignore": [],
+  "dependencies": {
+    "polymer": "Polymer/polymer#v0.9.0-rc.1"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^0.9.0",
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#^0.9.0",
+    "paper-styles": "PolymerElements/paper-styles#^0.9.0",
+    "test-fixture": "PolymerElements/test-fixture#^0.9.0",
+    "web-component-tester": "*",
+    "webcomponentsjs": "^0.6.0"
+  },
+  "_release": "0.9.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.9.0",
+    "commit": "4719b59248d2559c5718e55fc578f291ba339158"
+  },
+  "_source": "git://github.com/PolymerElements/paper-dialog-scrollable.git",
+  "_target": "^0.9.0",
+  "_originalSource": "PolymerElements/paper-dialog-scrollable"
+}

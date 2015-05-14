@@ -1,0 +1,28 @@
+{
+  "name": "iron-image",
+  "version": "0.9.0",
+  "private": true,
+  "authors": [
+    "The Polymer Authors"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#v0.9.0-rc.1",
+    "iron-flex-layout": "polymerelements/iron-flex-layout#^0.9.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "polymerelements/iron-component-page#^0.9.0",
+    "test-fixture": "polymerelements/test-fixture#^0.9.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.6.0",
+    "web-component-tester": "*"
+  },
+  "homepage": "https://github.com/PolymerElements/iron-image",
+  "_release": "0.9.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.9.0",
+    "commit": "9ae14acb3dd6cc18128bd278eba088db381da70d"
+  },
+  "_source": "git://github.com/PolymerElements/iron-image.git",
+  "_target": "^0.9.0",
+  "_originalSource": "PolymerElements/iron-image"
+}

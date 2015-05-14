@@ -1,0 +1,29 @@
+{
+  "name": "iron-iconset-svg",
+  "version": "0.9.1",
+  "private": true,
+  "authors": [
+    "The Polymer Authors"
+  ],
+  "dependencies": {
+    "polymer": "polymer/polymer#v0.9.0-rc.1",
+    "iron-meta": "polymerelements/iron-meta#^0.9.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "polymerelements/iron-component-page#^0.9.0",
+    "iron-icon": "polymerelements/iron-icon#^0.9.0",
+    "test-fixture": "polymerelements/test-fixture#^0.9.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.6.0",
+    "web-component-tester": "*"
+  },
+  "homepage": "https://github.com/PolymerElements/iron-iconset-svg",
+  "_release": "0.9.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.9.1",
+    "commit": "26d2e6ccca494da5032d0f80342b272ebb4a4361"
+  },
+  "_source": "git://github.com/PolymerElements/iron-iconset-svg.git",
+  "_target": "^0.9.0",
+  "_originalSource": "PolymerElements/iron-iconset-svg"
+}
