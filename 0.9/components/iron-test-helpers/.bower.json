@@ -1,13 +1,14 @@
 {
   "name": "iron-test-helpers",
-  "version": "0.9.3",
+  "version": "0.9.5",
   "authors": [
     "The Polymer Authors"
   ],
   "keywords": [
     "web-components",
     "web-component",
-    "polymer"
+    "polymer",
+    "test"
   ],
   "private": true,
   "repository": {
@@ -18,13 +19,16 @@
   "homepage": "https://github.com/PolymerElements/iron-test-helpers",
   "ignore": [],
   "dependencies": {
-    "polymer": "polymer/polymer#v0.9.0-rc.1"
+    "polymer": "Polymer/polymer#^0.9.0"
   },
-  "_release": "0.9.3",
+  "devDependencies": {
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+  },
+  "_release": "0.9.5",
   "_resolution": {
     "type": "version",
-    "tag": "v0.9.3",
-    "commit": "bd546f119d72ba8a42557da7230c57cf119a2b2a"
+    "tag": "v0.9.5",
+    "commit": "f6564fe9d5be830a6008d93d65730707af428f0d"
   },
   "_source": "git://github.com/PolymerElements/iron-test-helpers.git",
   "_target": "^0.9.0",

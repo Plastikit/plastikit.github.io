@@ -1,11 +1,15 @@
 {
   "name": "iron-menu-behavior",
-  "version": "0.9.0",
+  "version": "0.9.1",
+  "description": "Provides accessible menu behavior",
   "authors": "The Polymer Authors",
   "keywords": [
     "web-components",
     "web-component",
-    "polymer"
+    "polymer",
+    "iron",
+    "behavior",
+    "menu"
   ],
   "main": "iron-menu-behavior.html",
   "private": true,
@@ -17,20 +21,20 @@
   "homepage": "https://github.com/PolymerElements/iron-menu-behavior",
   "ignore": [],
   "dependencies": {
-    "polymer": "Polymer/polymer#v0.9.0-rc.1",
-    "iron-selector": "PolymerElements/iron-selector#^v0.9.0"
+    "iron-selector": "PolymerElements/iron-selector#^v0.9.0",
+    "polymer": "Polymer/polymer#^0.9.0"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^0.9.0",
     "test-fixture": "PolymerElements/test-fixture#^0.9.0",
     "web-component-tester": "*",
-    "webcomponentsjs": "webcomponents/webcomponentsjs#~0.6.0"
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
   },
-  "_release": "0.9.0",
+  "_release": "0.9.1",
   "_resolution": {
     "type": "version",
-    "tag": "v0.9.0",
-    "commit": "cb2e4178f46a3edb3c3c1bc465baf92833a62fe9"
+    "tag": "v0.9.1",
+    "commit": "7b9eea776907b36144c5f53e17bafacf59e28297"
   },
   "_source": "git://github.com/PolymerElements/iron-menu-behavior.git",
   "_target": "^0.9.0",

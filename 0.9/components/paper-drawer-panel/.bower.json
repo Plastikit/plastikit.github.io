@@ -1,13 +1,18 @@
 {
   "name": "paper-drawer-panel",
-  "version": "0.9.3",
+  "version": "0.9.4",
+  "description": "A responsive drawer panel",
   "authors": [
     "The Polymer Authors"
   ],
   "keywords": [
     "web-components",
     "web-component",
-    "polymer"
+    "polymer",
+    "paper",
+    "drawer",
+    "responsive",
+    "layout"
   ],
   "main": "index.html",
   "private": true,
@@ -20,20 +25,20 @@
   "dependencies": {
     "iron-selector": "PolymerElements/iron-selector#^0.9.0",
     "iron-media-query": "PolymerElements/iron-media-query#^0.9.0",
-    "polymer": "Polymer/polymer#v0.9.0-rc.1"
+    "polymer": "Polymer/polymer#^0.9.0"
   },
   "devDependencies": {
-    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.6.0",
     "iron-component-page": "PolymerElements/iron-component-page#^0.9.0",
-    "paper-styles": "PolymerElements/paper-styles#^0.9.0"
+    "paper-styles": "PolymerElements/paper-styles#^0.9.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
   },
-  "_release": "0.9.3",
+  "_release": "0.9.4",
   "_resolution": {
     "type": "version",
-    "tag": "v0.9.3",
-    "commit": "b60f1d1ec3db1715a9457c18548c695e234fa024"
+    "tag": "v0.9.4",
+    "commit": "176c173a7efa547f3d09d262acd39d30a488645f"
   },
   "_source": "git://github.com/PolymerElements/paper-drawer-panel.git",
-  "_target": "^0.9.0",
+  "_target": "^v0.9.4",
   "_originalSource": "PolymerElements/paper-drawer-panel"
 }

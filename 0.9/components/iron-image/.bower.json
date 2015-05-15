@@ -1,26 +1,27 @@
 {
   "name": "iron-image",
-  "version": "0.9.0",
+  "version": "0.9.1",
+  "description": "An image-displaying element with lots of convenient features",
   "private": true,
   "authors": [
     "The Polymer Authors"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#v0.9.0-rc.1",
-    "iron-flex-layout": "polymerelements/iron-flex-layout#^0.9.0"
+    "iron-flex-layout": "polymerelements/iron-flex-layout#^0.9.0",
+    "polymer": "Polymer/polymer#^0.9.0"
   },
   "devDependencies": {
     "iron-component-page": "polymerelements/iron-component-page#^0.9.0",
     "test-fixture": "polymerelements/test-fixture#^0.9.0",
-    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.6.0",
-    "web-component-tester": "*"
+    "web-component-tester": "*",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
   },
   "homepage": "https://github.com/PolymerElements/iron-image",
-  "_release": "0.9.0",
+  "_release": "0.9.1",
   "_resolution": {
     "type": "version",
-    "tag": "v0.9.0",
-    "commit": "9ae14acb3dd6cc18128bd278eba088db381da70d"
+    "tag": "v0.9.1",
+    "commit": "66f0637ee78f599f853e9d0b37aa64de7f1fbfb1"
   },
   "_source": "git://github.com/PolymerElements/iron-image.git",
   "_target": "^0.9.0",

@@ -1,0 +1,187 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <script src="components/webcomponentsjs/webcomponents.min.js"></script>
+    <link rel="import" href="components/polymer/polymer.html">
+    <link rel="import" href="components/iron-icons/iron-icons.html">
+    <link rel="import" href="components/iron-flex-layout/classes/iron-flex-layout.html">
+    <link rel="import" href="components/iron-flex-layout/iron-flex-layout.html">
+    <link rel="import" href="components/iron-pages/iron-pages.html">
+    <link rel="import" href="components/paper-styles/paper-styles.html">
+    <link rel="import" href="components/paper-menu/paper-menu.html">
+    <link rel="import" href="components/paper-item/paper-item.html">
+    <link rel="import" href="components/paper-toolbar/paper-toolbar.html">
+    <link rel="import" href="components/paper-drawer-panel/paper-drawer-panel.html">
+    <link rel="import" href="components/paper-header-panel/paper-header-panel.html">
+    <link rel="import" href="components/paper-icon-button/paper-icon-button.html">
+    <link rel="import" href="components/more-routing/more-routing.html">
+    
+    <title>Plastikit components</title>
+    
+    <style is="custom-style">
+      paper-header-panel[drawer] {
+        width: 100%;
+        height: 100%;
+      }
+      
+      iron-pages iframe {
+        border: none;
+        width: 100%;
+        height: 100%;
+      }
+      
+      paper-header-panel[drawer], paper-menu {
+        background-color: #eee;
+      }
+      
+      paper-item {
+        color: #212121;
+        cursor: pointer;
+        outline: none;
+      }
+      
+      paper-item:active {
+        background-color: #ddd;
+      }
+      
+      paper-toolbar {
+        --default-primary-color: #9c27b0;
+        --default-text-color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <template id="t" is="dom-bind">
+      <more-routing-config driver="hash"></more-routing-config>
+      
+      <paper-drawer-panel>
+      
+        <paper-header-panel drawer>
+          <paper-toolbar tool>
+            <div class="flex">Plastikit</div>
+          </paper-toolbar>
+          <paper-menu main selected="{{selectedRoute}}" on-iron-select="navigate" attr-for-selected="route">
+            <paper-item href="/" route="home">Home</paper-item>
+            <paper-item route="plastik-option-list">plastik-option-list</paper-item>
+            <paper-item route="plastik-selector">plastik-selector</paper-item>
+          </paper-menu>
+        </paper-header-panel>
+        
+        <paper-header-panel main>
+        
+          <paper-toolbar tool>
+            <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
+            <div class="flex">[[title]]</div>
+          </paper-toolbar>
+          
+          <iron-pages main selected="[[selectedRoute]]" attr-for-selected="route">
+          
+            <div route="plastik-option-list">
+              <iframe src="components/plastik-option-list/"></iframe>
+            </div>
+            
+            <div route="plastik-selector">
+              <iframe src="components/plastik-selector/"></iframe>
+            </div>
+            
+          </iron-pages>
+        
+        </paper-header-panel>
+        
+      </paper-drawer-panel>
+      
+      
+      <more-route-selector>
+        <iron-selector hidden on-iron-select="onNavigate">
+        
+          <more-route name="Home" href="/" path="/home"></more-route>
+          <more-route name="plastik-option-list" path="/plastik-option-list"></more-route>
+          <more-route name="plastik-selector" path="/plastik-selector"></more-route>
+          
+        </iron-selector>
+      </more-route-selector>
+    </template>
+    
+    <script>
+      var template, pageController, routeSelector, navMenu;
+        
+      
+      document.addEventListener("WebComponentsReady", function(e) {
+        template = document.querySelector('#t');
+        pageController = document.querySelector('iron-pages[main]');
+        routeSelector = document.querySelector('more-route-selector iron-selector');
+        navMenu = document.querySelector('paper-header-panel[drawer] paper-menu');
+        
+        template.logit = function(e) {
+          console.log(e);
+        };
+        
+        /*
+        *//*  Menu auto-generation code is not working yet in current version of Polymer *//*
+        var routes = routeSelector.querySelectorAll('more-route');
+        var setFlag = false;
+        
+        for (var i = 0; i < routes.length; i++) {
+          var menuItem = document.createElement('paper-item');
+          
+          var name = routes[i].getAttribute("name");
+          var path = routes[i].getAttribute("path");
+          var href = routes[i].getAttribute("href");
+          
+          if (!name || !path)
+            continue;
+          
+          menuItem.innerText = name;
+          
+          menuItem.setAttribute('route', path.substring(1));
+          
+          if (href != null && href != '') {
+            menuItem.setAttribute('href', href);
+          } else if (!setFlag && document.location.hash == null || document.location.hash == '') {
+            document.location.hash = "#!" + path;
+            template.selectedRoute = path.substring(1);
+            template.title = name;
+            setFlag = true;
+          }
+          
+          navMenu.appendChild(menuItem);
+        }
+        
+        if (!template.selectedRoute && document.location.hash && document.location.hash.length > 3) {
+          template.selectedRoute = document.location.hash.substring(3);
+        }
+        */
+        
+        if (document.location.hash == null || document.location.hash == '') {
+          var route = routeSelector.querySelector('more-route:not([href])');
+          document.location.hash = "#!" + route.path;
+          template.title = navMenu.querySelector('paper-item[route="' + route.path.substring(1) + '"]:not([href])').innerText;
+          template.selectedRoute = route.path.substring(1);
+        } else if (document.location.hash && document.location.hash.length > 3) {
+          template.selectedRoute = document.location.hash.substring(3);
+          template.title = navMenu.querySelector('paper-item[route="' + template.selectedRoute + '"]:not([href])').innerText;
+        }
+        
+        template.onNavigate = function(e) {
+          this.selectedRoute = e.detail.item.path.substring(1);
+          this.title = e.detail.item.name;
+        };
+        
+        template.navigate = function (e) {
+          console.log(e);
+          var elem = e.detail.item;
+          var href = elem.getAttribute('href');
+          if (href != null && href.length > 0) {
+            document.location.href = href;
+            return;
+          }
+          var route = elem.getAttribute('route');
+          if (route != null && route.length > 0) {
+            document.location.hash = '#!/' + route;
+            this.selectedRoute = route;
+          }
+        };
+      });
+    </script>
+  </body>
+</html>
