@@ -75,9 +75,6 @@
             <div class="flex">Plastikit</div>
           </paper-toolbar>
           <paper-menu main selected="{{selectedRoute}}" on-iron-select="navigate" attr-for-selected="route">
-            <paper-item href="/" route="home">Home</paper-item>
-            <paper-item route="plastik-option-list">plastik-option-list</paper-item>
-            <paper-item route="plastik-selector">plastik-selector</paper-item>
           </paper-menu>
         </paper-header-panel>
         
@@ -126,12 +123,6 @@
         routeSelector = document.querySelector('more-route-selector iron-selector');
         navMenu = document.querySelector('paper-header-panel[drawer] paper-menu');
         
-        template.logit = function(e) {
-          console.log(e);
-        };
-        
-        /*
-        *//*  Menu auto-generation code is not working yet in current version of Polymer *//*
         var routes = routeSelector.querySelectorAll('more-route');
         var setFlag = false;
         
@@ -145,7 +136,7 @@
           if (!name || !path)
             continue;
           
-          menuItem.innerText = name;
+          menuItem.innerHTML = name;
           
           menuItem.setAttribute('route', path.substring(1));
           
@@ -158,22 +149,12 @@
             setFlag = true;
           }
           
-          navMenu.appendChild(menuItem);
+          Polymer.dom(navMenu).appendChild(menuItem);
         }
         
         if (!template.selectedRoute && document.location.hash && document.location.hash.length > 3) {
           template.selectedRoute = document.location.hash.substring(3);
-        }
-        */
-        
-        if (document.location.hash == null || document.location.hash == '') {
-          var route = routeSelector.querySelector('more-route:not([href])');
-          document.location.hash = "#!" + route.path;
-          template.title = navMenu.querySelector('paper-item[route="' + route.path.substring(1) + '"]:not([href])').innerText;
-          template.selectedRoute = route.path.substring(1);
-        } else if (document.location.hash && document.location.hash.length > 3) {
-          template.selectedRoute = document.location.hash.substring(3);
-          template.title = navMenu.querySelector('paper-item[route="' + template.selectedRoute + '"]:not([href])').innerText;
+          template.title = document.querySelector('more-route[path="/' + template.selectedRoute + '"]:not([href])').getAttribute("name");
         }
         
         template.onNavigate = function(e) {
@@ -182,7 +163,6 @@
         };
         
         template.navigate = function (e) {
-          console.log(e);
           var elem = e.detail.item;
           var href = elem.getAttribute('href');
           if (href != null && href.length > 0) {
@@ -192,7 +172,6 @@
           var route = elem.getAttribute('route');
           if (route != null && route.length > 0) {
             document.location.hash = '#!/' + route;
-            this.selectedRoute = route;
           }
         };
       });
