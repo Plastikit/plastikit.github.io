@@ -50,6 +50,14 @@
         background-color: #ddd;
       }
       
+      iron-pages > section {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+      }
+      
       paper-toolbar {
         --default-primary-color: #9c27b0;
         --default-text-color: #fff;
@@ -82,13 +90,13 @@
           
           <iron-pages main selected="[[selectedRoute]]" attr-for-selected="route">
           
-            <div route="plastik-option-list">
+            <section route="plastik-option-list">
               <iframe src="components/plastik-option-list/"></iframe>
-            </div>
+            </section>
             
-            <div route="plastik-selector">
+            <section route="plastik-selector">
               <iframe src="components/plastik-selector/"></iframe>
-            </div>
+            </section>
             
           </iron-pages>
         
