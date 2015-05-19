@@ -8,19 +8,23 @@
     <link rel="import" href="components/iron-flex-layout/iron-flex-layout.html">
     <link rel="import" href="components/iron-pages/iron-pages.html">
     <link rel="import" href="components/paper-styles/paper-styles.html">
+    <link rel="import" href="components/paper-progress/paper-progress.html">
     <link rel="import" href="components/paper-menu/paper-menu.html">
     <link rel="import" href="components/paper-item/paper-item.html">
     <link rel="import" href="components/paper-toolbar/paper-toolbar.html">
     <link rel="import" href="components/paper-drawer-panel/paper-drawer-panel.html">
     <link rel="import" href="components/paper-header-panel/paper-header-panel.html">
     <link rel="import" href="components/paper-icon-button/paper-icon-button.html">
-    <link rel="import" href="components/more-routing/more-routing.html">
+    <!-- TODO: Replace below with components/more-routing/more-routing.html
+         pending merge of https://github.com/PolymerLabs/more-routing/pull/37 -->
+    <link rel="import" href="https://rawgit.com/vsimonian/more-routing/patch-1/more-routing.html">
     
     <title>Plastikit components</title>
     
     <style is="custom-style">
-      html, body {
+      html, body, iframe {
         background: #eee;
+        font: normal normal 16px Roboto,'Helvetica Neue',Helvetica,Arial,sans-serif;
         margin: 0;
         padding: 0;
       }
@@ -34,16 +38,43 @@
         border: none;
         width: 100%;
         height: 100%;
+        visibility: visible;
+      }
+      
+      iron-pages iframe.unresolved {
+        visibility: hidden;
       }
       
       paper-header-panel[drawer], paper-menu {
         background-color: #fafafa;
       }
       
-      paper-item {
-        color: #212121;
+      paper-header-panel[drawer] {
+        -webkit-user-select: none;
+        user-select: none;
+        cursor: default;
+      }
+      
+      paper-item, paper-menu a {
+        color: rgba(0, 0, 0, .87);
+        text-decoration: none;
         cursor: pointer;
         outline: none;
+      }
+      
+      paper-menu header {
+        color: rgba(0, 0, 0, .54);
+        height: 48px;
+        display: flex;
+        align-items: center;
+        align-content: center;
+        margin: 8px 0 0 0;
+        padding: 8px 16px 0 16px;
+        border-top: 1px solid rgba(0, 0, 0, .12);
+        outline: none;
+        -webkit-user-select: none;
+        user-select: none;
+        cursor: default;
       }
       
       paper-item:active {
@@ -56,11 +87,55 @@
         left: 0;
         bottom: 0;
         right: 0;
+        overflow: hidden;
+      }
+      
+      paper-menu > div {
+        height: 48px;
       }
       
       paper-toolbar {
         --default-primary-color: #9c27b0;
         --default-text-color: #fff;
+        -webkit-user-select: none;
+        user-select: none;
+        cursor: default;
+      }
+      
+      @media (max-width: 639px) {
+        paper-toolbar::shadow .toolbar-tools.paper-toolbar > *:first-child:not(paper-icon-button) {
+          margin-left: 8px;
+        }
+        paper-toolbar::shadow .toolbar-tools.paper-toolbar > *:last-child:not(paper-icon-button) {
+          margin-right: 8px;
+        }
+      }
+      
+      paper-toolbar.has-shadow:after::shadow {
+        transform: translate(0, 0);
+        transition: transform ease-in-out .38s;
+      }
+      
+      paper-toolbar paper-progress {
+        position: absolute;
+        left: 0;
+        bottom: -4px;
+        width: 100%;
+        height: 4px;
+        z-index: 5;
+        transform: scale(1, 0);
+        visibility: hidden;
+        transition: visibility 0s step-start .38s, transform ease-in-out .38s; 
+      }
+      
+      paper-toolbar.loading paper-progress {
+        visibility: visible;
+        transform: scale(1, 1);
+        transition-delay: 0s;
+      }
+      
+      paper-toolbar.has-shadow.loading:after::shadow {
+        transform: translate(0, 4px);
       }
     </style>
   </head>
@@ -74,28 +149,19 @@
           <paper-toolbar tool>
             <div class="flex">Plastikit</div>
           </paper-toolbar>
-          <paper-menu main selected="{{selectedRoute}}" on-iron-select="navigate" attr-for-selected="route">
-          </paper-menu>
+          <paper-menu main selected="{{selectedRoute}}" on-iron-select="menuItemSelected"
+           attr-for-selected="route"></paper-menu>
         </paper-header-panel>
         
         <paper-header-panel main>
         
           <paper-toolbar tool>
             <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
-            <div class="flex">[[title]]</div>
+            <div class="flex">[[title]]</div><paper-progress indeterminate></paper-progress>
           </paper-toolbar>
           
-          <iron-pages main selected="[[selectedRoute]]" attr-for-selected="route">
-          
-            <section route="plastik-option-list">
-              <iframe src="components/plastik-option-list/"></iframe>
-            </section>
-            
-            <section route="plastik-selector">
-              <iframe src="components/plastik-selector/"></iframe>
-            </section>
-            
-          </iron-pages>
+          <iron-pages main selected="[[selectedRoute]]" on-iron-select="pageSelected"
+           on-iron-deselect="pageDeselected" attr-for-selected="route"></iron-pages>
         
         </paper-header-panel>
         
@@ -103,19 +169,157 @@
       
       
       <more-route-selector>
-        <iron-selector hidden on-iron-select="onNavigate">
-        
-          <more-route name="Home" href="/" path="/home"></more-route>
-          <more-route name="plastik-option-list" path="/plastik-option-list"></more-route>
-          <more-route name="plastik-selector" path="/plastik-selector"></more-route>
-          
-        </iron-selector>
+        <iron-selector hidden on-iron-select="routeChanged"></iron-selector>
       </more-route-selector>
     </template>
     
     <script>
+      var navmap = {
+        routes: [
+          { name: "Home", url: "/", navigate: true },
+          {
+            category: "UI elements",
+            prefix: "components/",
+            routes: [
+              { name: "plastik-option-list" }
+            ]
+          },
+          {
+            category: "Utility elements",
+            prefix: "components/",
+            routes: [
+              { name: "plastik-selector" }
+            ]
+          }
+        ]
+      };
+      
       var template, pageController, routeSelector, navMenu;
+      
+      function navTreeToElementList(routes, pageGenerator, prefix, existingRouteNames,
+          existingRoutePaths) {
+        if (typeof routes === 'undefined') { return []; }
         
+        var routeList = routes.routes || routes;
+        
+        if (!Array.isArray(routeList)) { return []; }
+        
+        var elements = [];
+        var hasRootPrefix = typeof prefix === 'string';
+        var hasParentPrefix = typeof routes.prefix === 'string';
+        var itemPrefix = (hasRootPrefix ? prefix : '') + (hasParentPrefix ? routes.prefix : '');
+        
+        // Use object['route'] to find duplicates - more performant than array lookups
+        var foundRouteNames = typeof existingRouteNames === 'object' ? existingRouteNames : [];
+        var foundRoutePaths = typeof existingRoutePaths === 'object' ? existingRoutePaths : [];
+        
+        for (var i = 0; i < routeList.length; i++) {
+          // If it's a category, create subheader, get elements for its routes
+          if (typeof routeList[i].category === 'string') {
+            
+            var subheaderElement = document.createElement('header');
+            
+            subheaderElement.textContent = routeList[i].category;
+            elements.push({ menuElement: subheaderElement });
+            
+            var categoryElements = navTreeToElementList(routeList[i], pageGenerator, routes.prefix,
+              foundRouteNames, foundRoutePaths);
+            
+            for (var j = 0; j < categoryElements.length; j++) {
+              
+              var elementGroup = {};
+              
+              if (categoryElements[j].routeElement) {
+                elementGroup.routeElement = categoryElements[j].routeElement;
+              }
+              if (categoryElements[j].menuElement) {
+                elementGroup.menuElement = categoryElements[j].menuElement;
+              }
+              if (categoryElements[j].pageElement) {
+                elementGroup.pageElement = categoryElements[j].pageElement;
+              }
+              
+              elements.push(elementGroup);
+            }
+            continue;
+          }
+          
+          if (typeof routeList[i].name !== 'string') { continue; }
+                    
+          var routeName = itemPrefix + routeList[i].name;
+          var routeUrl = routeList[i].url || (itemPrefix + (routeList[i].path || routeList[i].name));
+          
+          // Avoid duplicate route names
+          if (typeof foundRouteNames[routeName] === 'number') {
+            routeName += '_' + (++foundRouteNames[routeName]);
+          } else {
+            foundRouteNames[routeName] = 1;
+          }
+          
+          var menuElement = document.createElement('paper-item');
+          
+          menuElement.textContent = routeList[i].name; // Don't want '_x' appended to menu item text
+          
+          if (routeList[i].navigate) {
+            
+            var anchorElement = document.createElement('a');
+            
+            anchorElement.setAttribute('href', routeUrl);
+            anchorElement.appendChild(menuElement);
+            elements.push({ menuElement: anchorElement });
+          } else {
+            menuElement.setAttribute('route', routeName);
+            
+            var routePath = itemPrefix + (routeList[i].path || routeList[i].name);
+            
+            if (routePath.substring(0, 1) != '/')
+              routePath = '/' + routePath;
+            
+            // Avoid duplicate route paths
+            if (typeof foundRoutePaths[routePath] === 'number') {
+              routePath += '_' + (++foundRoutePaths[routePath]);
+            } else {
+              foundRoutePaths[routePath] = 1;
+            }
+          
+            var routeElement = document.createElement('more-route');
+            
+            if (routeElement.routingIsReady) {
+              routeElement.routingIsReady = false;
+              routeElement.routingShouldBeReady = true;
+            }
+            routeElement.setAttribute('name', routeName);
+            routeElement.setAttribute('path', routePath);
+            
+            var pageElement;
+            
+            // If pageGenerator isn't passed, generate an empty element automatically.
+            // If passed, use the provided function to generate elements.
+            // If null is passed, don't generate any page element.
+            if (pageGenerator !== null) {
+              if (typeof pageGenerator === 'function') {
+                pageElement = pageGenerator(routeName, routePath, routeUrl);
+                // Error if returned element is not an element, unless it is specifically
+                // 'null' to allow for intentional omissions.
+                if (pageElement !== null && (typeof pageElement.nodeType !== "number"
+                    || pageElement.nodeType != 1 /* ELEMENT_NODE */)) {
+                  console.error('Value returned for route \'' + routeName
+                    + '\' by provided pageGenerator function is not an element.');
+                  continue;
+                }
+              } else { 
+                pageElement = document.createElement('section');
+                pageElement.setAttribute('route', routeName);
+              }
+            }
+            
+            elements.push({ menuElement: menuElement, routeElement: routeElement,
+              pageElement: pageElement });
+          }
+        }
+        
+        return elements;
+      }
       
       document.addEventListener("WebComponentsReady", function(e) {
         template = document.querySelector('#t');
@@ -123,47 +327,89 @@
         routeSelector = document.querySelector('more-route-selector iron-selector');
         navMenu = document.querySelector('paper-header-panel[drawer] paper-menu');
         
-        var routes = routeSelector.querySelectorAll('more-route');
-        var setFlag = false;
+        /* Works, but affects all iron-selectors */
+        navMenu.excludedLocalNames['header'] = 1;
+        navMenu.excludedLocalNames['a'] = 1;
         
-        for (var i = 0; i < routes.length; i++) {
-          var menuItem = document.createElement('paper-item');
+        template.generatePageElement = function(routeName, routePath, routeUrl) {
           
-          var name = routes[i].getAttribute("name");
-          var path = routes[i].getAttribute("path");
-          var href = routes[i].getAttribute("href");
+          var iframeElement = document.createElement('iframe');
           
-          if (!name || !path)
-            continue;
+          iframeElement.setAttribute('data-src', routeUrl);
+          iframeElement.classList.add('unresolved');
+          iframeElement.addEventListener('load', function(e) {
+            var src = this.getAttribute('src');
+            if (src != null && src != '') {
+              this.classList.remove('unresolved');
+              document.querySelector('paper-header-panel[main] paper-toolbar')
+                .classList.remove('loading');
+            }
+          });
           
-          menuItem.innerHTML = name;
+          var pageElement = document.createElement('section');
           
-          menuItem.setAttribute('route', path.substring(1));
+          pageElement.setAttribute('route', routeName);
+          pageElement.appendChild(iframeElement);
           
-          if (href != null && href != '') {
-            menuItem.setAttribute('href', href);
-          } else if (!setFlag && document.location.hash == null || document.location.hash == '') {
-            document.location.hash = "#!" + path;
-            template.selectedRoute = path.substring(1);
-            template.title = name;
-            setFlag = true;
-          }
-          
-          Polymer.dom(navMenu).appendChild(menuItem);
-        }
-        
-        if (!template.selectedRoute && document.location.hash && document.location.hash.length > 3) {
-          template.selectedRoute = document.location.hash.substring(3);
-          template.title = document.querySelector('more-route[path="/' + template.selectedRoute + '"]:not([href])').getAttribute("name");
-        }
-        
-        template.onNavigate = function(e) {
-          this.selectedRoute = e.detail.item.path.substring(1);
-          this.title = e.detail.item.name;
+          return pageElement;
         };
         
-        template.navigate = function (e) {
-          var elem = e.detail.item;
+        var navElements = navTreeToElementList(navmap, template.generatePageElement);
+        var setFlag = false;
+        
+        for (var i = 0; i < navElements.length; i++) {
+          Polymer.dom(navMenu).appendChild(navElements[i].menuElement);
+          if (navElements[i].routeElement) {
+            Polymer.dom(routeSelector).appendChild(navElements[i].routeElement);
+            if (navElements[i].routeElement.routingShouldBeReady === true) {
+              navElements[i].routeElement.routingIsReady = true;
+              navElements[i].routeElement.routingShouldBeReady = undefined;
+            }
+            if (navElements[i].pageElement) {
+              Polymer.dom(pageController).appendChild(navElements[i].pageElement);
+              if (!setFlag) {
+                
+                var name = navElements[i].routeElement.getAttribute('name');
+                var path = navElements[i].routeElement.getAttribute('path');
+                var iframe = navElements[i].pageElement.querySelector('iframe');
+                var displayName = navElements[i].menuElement.textContent;
+                
+                if (document.location.hash && document.location.hash.length > 2 && 
+                    document.location.hash.substring(2) != path) { continue; }
+                    
+                document.location.hash = "#!" + path;
+                template.selectedRoute = name;
+                template.title = displayName;
+                document.querySelector('paper-header-panel[main] paper-toolbar')
+                  .classList.add('loading');
+                iframe.setAttribute('src', iframe.getAttribute('data-src'));
+                setFlag = true;
+              }
+            }
+          }
+        }
+        
+        template.pageSelected = function(e, detail) {
+          document.querySelector('paper-header-panel[main] paper-toolbar').classList
+            .add('loading');
+          var iframe = detail.item.querySelector('iframe');
+          iframe.setAttribute('src', iframe.getAttribute('data-src'));
+        };
+        
+        template.pageDeselected = function(e, detail) {
+          var iframe = detail.item.querySelector('iframe');
+          iframe.classList.add('unresolved');
+          iframe.setAttribute('src', '');
+        };
+        
+        template.routeChanged = function(e, detail) {
+          this.selectedRoute = detail.item.name;
+          this.title = navMenu.querySelector('paper-item[route="' + template.selectedRoute
+            + '"]');
+        };
+        
+        template.menuItemSelected = function (e, detail) {
+          var elem = detail.item;
           var href = elem.getAttribute('href');
           if (href != null && href.length > 0) {
             document.location.href = href;
@@ -171,7 +417,8 @@
           }
           var route = elem.getAttribute('route');
           if (route != null && route.length > 0) {
-            document.location.hash = '#!/' + route;
+            document.location.hash = '#!' + routeSelector.querySelector('more-route[name="'
+              + route + '"]').getAttribute('path');
           }
         };
       });
