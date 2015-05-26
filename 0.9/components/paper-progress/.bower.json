@@ -1,6 +1,5 @@
 {
   "name": "paper-progress",
-  "version": "0.9.1",
   "description": "A material design progress bar",
   "private": true,
   "authors": "The Polymer Authors",
@@ -29,14 +28,14 @@
     "paper-button": "PolymerElements/paper-button#^0.9.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
   },
-  "homepage": "https://github.com/PolymerElements/paper-progress",
-  "_release": "0.9.1",
+  "homepage": "https://github.com/vsimonian/paper-progress",
+  "_release": "d42d411ed0",
   "_resolution": {
-    "type": "version",
-    "tag": "v0.9.1",
-    "commit": "e367cf6d2bd9f4884d71f04837258891af0753d9"
+    "type": "branch",
+    "branch": "animfix-2",
+    "commit": "d42d411ed0357f8a2cc253d8c7a6fee25eedf784"
   },
-  "_source": "git://github.com/PolymerElements/paper-progress.git",
-  "_target": "^0.9.0",
-  "_originalSource": "PolymerElements/paper-progress"
+  "_source": "git://github.com/vsimonian/paper-progress.git",
+  "_target": "animfix-2",
+  "_originalSource": "vsimonian/paper-progress"
 }
