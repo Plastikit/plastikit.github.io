@@ -103,9 +103,22 @@ a {
 	max-width: 400px;
 }
 
+.jumbotron svg {
+	-ms-user-select: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
+	width: 256px;
+	height: 256px;
+}
+
 @media (max-width: 632px) {
 	.jumbotron div {
 		text-align: center;
+	}
+	.jumbotron svg {
+		width: 200px;
+		height: 200px;
 	}
 }
 
