@@ -149,7 +149,7 @@
             <div class="flex">Plastikit</div>
           </paper-toolbar>
           <paper-menu main selected="{{selectedRoute}}" on-iron-select="menuItemSelected"
-           attr-for-selected="route"></paper-menu>
+           attr-for-selected="route" selectable="paper-item"></paper-menu>
         </paper-header-panel>
         
         <paper-header-panel main>
@@ -326,10 +326,6 @@
         pageController = document.querySelector('iron-pages[main]');
         routeSelector = document.querySelector('more-route-selector iron-selector');
         navMenu = document.querySelector('paper-header-panel[drawer] paper-menu');
-        
-        /* Works, but affects all iron-selectors */
-        navMenu.excludedLocalNames['header'] = 1;
-        navMenu.excludedLocalNames['a'] = 1;
         
         template.generatePageElement = function(routeName, routePath, routeUrl) {
           
