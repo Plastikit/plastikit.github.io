@@ -21,6 +21,6 @@
     "paper-drawer-panel": "PolymerElements/paper-drawer-panel#^v0.9.4",
     "iron-elements": "PolymerElements/iron-elements#^0.9.1",
     "paper-elements": "PolymerElements/paper-elements#^0.9.1",
-    "more-routing": "PolymerLabs/more-routing#^0.9.0-rc3"
+    "more-routing": "vsimonian/more-routing#patch-1"
   }
 }
