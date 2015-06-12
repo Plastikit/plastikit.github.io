@@ -1,0 +1,26 @@
+{
+  "name": "plastikit-polymer-demos",
+  "version": "1.0.0",
+  "homepage": "https://www.plastikit.org/1.x/components/",
+  "authors": [
+    "The Plastikit Authors <developers@plastikit.org>"
+  ],
+  "license": "BSD-3-Clause",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0",
+    "iron-icons": "PolymerElements/iron-icons#^1.0.0",
+    "iron-pages": "PolymerElements/iron-pages#^1.0.0",
+    "paper-progress": "vsimonian/paper-progress#animfix-2",
+    "paper-drawer-panel": "PolymerElements/paper-drawer-panel#^1.0.0",
+    "iron-elements": "PolymerElements/iron-elements#1.0.0",
+    "paper-elements": "PolymerElements/paper-elements#1.0.0",
+    "more-routing": "vsimonian/more-routing#patch-1",
+  }
+}
