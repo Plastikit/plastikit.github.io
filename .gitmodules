@@ -7,3 +7,6 @@
 [submodule "1.x/components/plastik-selector"]
 	path = 1.x/components/plastik-selector
 	url = https://github.com/Plastikit/plastik-selector
+[submodule "1.x/components/plastik-regex-validator"]
+	path = 1.x/components/plastik-regex-validator
+	url = https://github.com/Plastikit/plastik-regex-validator
