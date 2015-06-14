@@ -10,3 +10,6 @@
 [submodule "1.x/components/plastik-regex-validator"]
 	path = 1.x/components/plastik-regex-validator
 	url = https://github.com/Plastikit/plastik-regex-validator
+[submodule "1.x/components/plastik-url-validator"]
+	path = 1.x/components/plastik-url-validator
+	url = git://github.com/Plastikit/plastik-url-validator
