@@ -13,3 +13,6 @@
 [submodule "1.x/components/plastik-url-validator"]
 	path = 1.x/components/plastik-url-validator
 	url = https://github.com/Plastikit/plastik-url-validator
+[submodule "1.x/components/plastik-lazy-loader"]
+	path = 1.x/components/plastik-lazy-loader
+	url = https://github.com/Plastikit/plastik-lazy-loader.git
